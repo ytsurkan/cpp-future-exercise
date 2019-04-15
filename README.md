@@ -10,7 +10,7 @@ in the directory where you downloaded/cloned the repository execute the commands
 
     mkdir lib
 
-    put the catch2 library to lib directory
+    put catch2 library to the created lib directory
 
     mkdir build
     cd build
