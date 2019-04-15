@@ -52,7 +52,7 @@ public:
     {
         auto done = false;
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            auto _(std::unique_lock<std::mutex>(m_mutex));
             done = m_done;
             if (!done)
             {
@@ -109,9 +109,8 @@ private:
     {
         decltype(m_then) then;
         {
-            std::lock_guard<std::mutex> lock(m_mutex);
+            auto _(std::lock_guard<std::mutex>(m_mutex));
             m_done = true;
-            //yes, we move it out, because we don't want to call the continuation under a locked mutex
             then.swap(m_then);
         }
         m_cv.notify_all();
@@ -162,7 +161,7 @@ public:
     {
         auto done = false;
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            auto _(std::unique_lock<std::mutex>(m_mutex));
             done = m_done;
             if (!done)
             {
@@ -178,7 +177,7 @@ public:
     void resetContinuation()
     {
         decltype(m_then) continuation;
-        std::unique_lock<std::mutex> lock(m_mutex);
+        auto _(std::unique_lock<std::mutex>(m_mutex));
         m_then.swap(continuation);
     }
 
@@ -218,9 +217,8 @@ private:
     {
         decltype(m_then) then;
         {
-            std::lock_guard<std::mutex> lock(m_mutex);
+            auto _(std::lock_guard<std::mutex>(m_mutex));
             m_done = true;
-            //yes, we move it out, because we don't want to call the continuation under a locked mutex
             then.swap(m_then);
         }
         m_cv.notify_all();
